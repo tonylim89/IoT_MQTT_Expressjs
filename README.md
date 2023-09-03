@@ -69,7 +69,7 @@ Acts as the interface between human operators and the MQTT system. Also behaves 
 
 ## Other Implementations
 
-A MQTT broker would need to be setup for the entire process to work. Currently I have setup the broker using a VM in a docker container. The expressjs app is also implemented by way of docker container. End to end testing has been carried out successfully.
+An MQTT broker would need to be setup for the entire process to work. Currently I have setup the broker using a VM in a docker container. The Expressjs app is also implemented by way of docker container. End to end testing has been carried out successfully.
 
 ## Further Implementations & Considerations
 
