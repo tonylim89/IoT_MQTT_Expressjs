@@ -1,4 +1,4 @@
-# Connecting ESP32 to MQTT to expressjs backend
+# Connecting ESP32 to MQTT to Express.js backend
 
 This guide offers a simulation into a real-time card transaction system built around the MQTT protocol with an Express.js backend and an Arduino-based device as the client.
 
@@ -69,7 +69,7 @@ Acts as the interface between human operators and the MQTT system. Also behaves 
 
 ## Other Implementations
 
-An MQTT broker would need to be setup for the entire process to work. Currently I have setup the broker using a VM in a docker container. The Expressjs app is also implemented by way of docker container. End to end testing has been carried out successfully.
+An MQTT broker would need to be setup for the entire process to work. Currently I have setup the broker using a VM in a docker container. The Express.js app is also implemented by way of docker container. End to end testing has been carried out successfully.
 
 ## Further Implementations & Considerations
 
