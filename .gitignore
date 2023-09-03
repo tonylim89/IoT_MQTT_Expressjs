@@ -1,0 +1,5 @@
+# Ignore tar files everywhere in the repository
+*.tar
+
+# Ignore node_modules directory anywhere in the repository
+**/node_modules/

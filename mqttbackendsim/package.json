@@ -1,0 +1,14 @@
+{
+    "name": "card_transaction_backend",
+    "version": "1.0.0",
+    "description": "MQTT Backend Simulation for Card Transaction",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "express": "^4.17.1",
+        "mqtt": "^4.2.8",
+        "body-parser": "^1.19.0"
+    }
+}
