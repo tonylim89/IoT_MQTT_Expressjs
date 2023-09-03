@@ -5,6 +5,7 @@ This guide offers a simulation into a real-time card transaction system built ar
 ## Table of Contents
 
 - [Overview](#overview)
+- [Lanuguage Used](#language-used)
 - [Components](#components)
   - [Arduino Device](#arduino-device)
   - [MQTT Broker](#mqtt-broker)
@@ -21,6 +22,10 @@ This guide offers a simulation into a real-time card transaction system built ar
 ## Overview
 
 The system is structured to allow an Arduino device to send transaction requests and receive responses from a central server. The server processes these requests and provides an interface for human operators to approve or deny the transactions to simulate backend processing of a transaction.
+
+## Language Used
+
+- ESP32 is coded using C++ on Arduino. Express.js is coded using... well, Javascript.
 
 ## Components
 
