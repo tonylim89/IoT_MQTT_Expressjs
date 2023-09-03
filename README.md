@@ -6,9 +6,15 @@ This guide offers a simulation into a real-time card transaction system built ar
 
 - [Overview](#overview)
 - [Components](#components)
+  - [Arduino Device](#arduino-device)
+  - [MQTT Broker](#mqtt-broker)
+  - [Express.js Backend](#expressjs-backend)
 - [Data Flow](#data-flow)
 - [Other Implementations](#other-implementations)
 - [Further Implementations & Considerations](#further-implementations--considerations)
+  - [WebSockets for Enhanced Real-time Interaction](#websockets-for-enhanced-real-time-interaction)
+  - [Automated Transaction Decision](#automated-transaction-decision)
+  - [Handling Multiple Concurrent Transactions](#handling-multiple-concurrent-transactions)
 - [Note on Express.js Backend](#note-on-expressjs-backend)
 
 
