@@ -13,7 +13,7 @@ This guide offers a simulation into a real-time card transaction system built ar
 - [Data Flow](#data-flow)
 - [Other Implementations](#other-implementations)
 - [Further Implementations & Considerations](#further-implementations--considerations)
-  - [WebSockets for Enhanced Real-time Interaction](#websockets-for-enhanced-real-time-interaction)
+  - [WebSockets for Enhanced Real-time Interaction [Implemented]](#websockets-for-enhanced-real-time-interaction-implemented)
   - [Automated Transaction Decision](#automated-transaction-decision)
   - [Handling Multiple Concurrent Transactions](#handling-multiple-concurrent-transactions)
 - [Note on Express.js Backend](#note-on-expressjs-backend)
@@ -78,7 +78,7 @@ An MQTT broker would need to be setup for the entire process to work. Currently 
 
 ## Further Implementations & Considerations
 
-### WebSockets for Enhanced Real-time Interaction
+### WebSockets for Enhanced Real-time Interaction [Implemented]
 
 While the current system effectively handles real-time data movement using MQTT, further enhancements can be made by incorporating WebSockets. WebSockets can ensure that the operator's interface in the Express.js backend instantly reflects new transactions without requiring manual refreshes.
 
