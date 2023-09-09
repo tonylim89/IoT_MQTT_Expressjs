@@ -1,13 +1,18 @@
 const express = require('express');
 const mqtt = require('mqtt');
 const bodyParser = require('body-parser');
+const WebSocket = require('ws');
 
+const http = require('http');
 const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 
-// MQTT credentials (change to your own)
+
+// MQTT credentials 
 const mqttUsername = 'MQTT_USERNAME';
 const mqttPassword = 'MQTT_PASSWORD';
-// MQTT broker IP address (change to your own)
+// MQTT broker IP address 
 const client = mqtt.connect('mqtt://MQTT_IP', {
     username: mqttUsername,
     password: mqttPassword
@@ -27,9 +32,19 @@ client.on('message', function(topic, message) {
     if (topic === 'card/transaction/request') {
         const transaction = JSON.parse(message);
         pendingTransactions.push(transaction);
-
         console.log(`Received a transaction request from card ID: ${transaction.cardID}`);
+        // Notify all WebSocket clients about the new transaction
+        wss.clients.forEach(function each(client) {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify(transaction));
+            }
+        });
     }
+});
+
+wss.on('connection', ws => {
+    console.log('Client connected');
+    ws.on('close', () => console.log('Client disconnected'));
 });
 
 app.get('/', (req, res) => {
@@ -56,36 +71,83 @@ app.get('/', (req, res) => {
                 `).join('')}
             </tbody>
         </table>
+        `;
+        //WebSocket script to refresh the page when a new transaction comes in
+        const wsScript = `
+        <script>
+            const ws = new WebSocket(((window.location.protocol === "https:") ? "wss://" : "ws://") + window.location.host);
+
+            ws.onmessage = function(event) {
+                const transaction = JSON.parse(event.data);
+                console.log('New transaction received:', transaction);
+                addTransactionToTable(transaction);
+            };
+            
+            function addTransactionToTable(transaction) {
+                const table = document.querySelector("tbody");
+                const newRow = document.createElement("tr");
+                
+                const cardIdCell = document.createElement("td");
+                cardIdCell.innerText = transaction.cardID;
+                newRow.appendChild(cardIdCell);
+                
+                const timestampCell = document.createElement("td");
+                timestampCell.innerText = transaction.timestamp;
+                newRow.appendChild(timestampCell);
+                
+                const actionsCell = document.createElement("td");
+                
+                const approveButton = document.createElement("button");
+                approveButton.innerText = "Approve";
+                approveButton.onclick = function() {
+                    fetch('/decide?cardID=' + transaction.cardID + '&status=approved');
+                    newRow.remove(); // remove the row once decision is made
+                };
+                actionsCell.appendChild(approveButton);
+                
+                const denyButton = document.createElement("button");
+                denyButton.innerText = "Deny";
+                denyButton.onclick = function() {
+                    fetch('/decide?cardID=' + transaction.cardID + '&status=denied');
+                    newRow.remove(); // remove the row once decision is made
+                };
+                actionsCell.appendChild(denyButton);
+                
+                newRow.appendChild(actionsCell);
+                table.appendChild(newRow);
+            }
+        </script>
     `;
 
     res.send(`
         <!DOCTYPE html>
         <html>
         <head>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    text-align: center;
-                    margin-top: 50px;
-                }
-                table {
-                    width: 80%;
-                    margin-left: auto;
-                    margin-right: auto;
-                    border-collapse: collapse;
-                }
-                th, td {
-                    padding: 15px;
-                    border: 1px solid #ddd;
-                }
-                th {
-                    background-color: #f2f2f2;
-                }
-            </style>
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        table {
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
         </head>
         <body>
             <h2>Card Transaction Decision</h2>
             ${transactionListHtml}
+            ${wsScript}
         </body>
         </html>
     `);
@@ -107,4 +169,4 @@ app.get('/decide', (req, res) => {
     res.redirect('/');
 });
 
-app.listen(2999, () => console.log('Backend simulation running on http://localhost:2999'));
+server.listen(2999, () => console.log('Backend simulation running on http://localhost:2999'));
